@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="Common/layout :: head"></head>
+<body th:fragment="content">
+    <div class="text-center">
+        <h1>Welcome to MANA Movie Studios!</h1>
+        <p class="lead">Discover and review your favorite movies!</p>
+        <a th:href="@{/register}" class="btn btn-primary">Register Now</a>
+        <a th:href="@{/movies}" class="btn btn-secondary">Browse Movies</a>
+    </div>
+</body>
+</html>
