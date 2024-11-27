@@ -10,6 +10,9 @@ import com.manastudio.Features.Users.Exceptions.UserNotFoundException;
 import com.manastudio.Features.Users.Models.User;
 import com.manastudio.Features.Users.Repositories.UserRepository;
 
+import java.util.Collections;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +24,6 @@ public class UserAuthorizationService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // Constructor injection
     public UserAuthorizationService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -38,48 +40,45 @@ public class UserAuthorizationService implements UserDetailsService {
             throw new UserNotFoundException("User not found with username: " + username);
         }
 
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
-                .password(user.getPassword()) // The password is assumed to be already encoded
-                .roles(user.getRole()) // Assign the user's role
-                .build();
+        // Use the CustomUserDetails class to include firstName, lastName, email, and other fields
+        return new CustomUserDetails(
+                user.getUsername(),
+                user.getPassword(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole()))
+        );
     }
 
     /**
      * Register a new user
-     * Returns a `Result<Long>`: User ID if successful, or an exception wrapped in the `Result`.
      */
     public Result<Long> registerUser(RegisterRequestDto registerRequestDto) {
-        // Extract fields from the DTO
         String username = registerRequestDto.getUsername();
         String email = registerRequestDto.getEmail();
 
-        // Check if username already exists
+        // Check if username or email already exists
         if (userRepository.findByUsername(username) != null) {
             return Result.from(new UserAlreadyExistsException("Username already exists."));
         }
-
-        // Check if email already exists
         if (userRepository.findByEmail(email) != null) {
             return Result.from(new UserAlreadyExistsException("Email already exists."));
         }
 
         try {
-            // Create a new User object
             User newUser = new User();
             newUser.setFirstName(registerRequestDto.getFirstName());
             newUser.setLastName(registerRequestDto.getLastName());
             newUser.setUsername(username);
             newUser.setEmail(email);
-            newUser.setPassword(passwordEncoder.encode(registerRequestDto.getPassword())); // Encode the password
-            newUser.setDateOfBirth(registerRequestDto.getDateOfBirth()); // Set date of birth
-            newUser.setRole("USER"); // Default role
+            newUser.setPassword(passwordEncoder.encode(registerRequestDto.getPassword()));
+            newUser.setDateOfBirth(registerRequestDto.getDateOfBirth());
+            newUser.setRole("USER");
 
-            // Save the user and return their ID
             User savedUser = userRepository.save(newUser);
-            return Result.from(savedUser.getId()); // Success case
+            return Result.from(savedUser.getId());
         } catch (Exception e) {
-            // Return any unexpected exceptions as a failure result
             return Result.from(e);
         }
     }

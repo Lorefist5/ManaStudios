@@ -17,4 +17,7 @@ public class LoginController {
     public String logoutPage() {
         return "Auth/logout-success"; // Render the Auth/logout-success.html template (optional)
     }
+    
+    
+    
 }

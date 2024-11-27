@@ -7,11 +7,15 @@ import jakarta.persistence.GenerationType;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDateTime;
 @Entity
 public class Movie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Long id;
 
     @Getter
@@ -33,5 +37,9 @@ public class Movie {
     @Getter
     @Setter
     private String actors; // A comma-separated list of actors
-
+    
+    @CreatedDate
+    @Getter
+    @Setter
+    private LocalDateTime dateCreated;
 }

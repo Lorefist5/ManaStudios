@@ -1,12 +1,201 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="Common/layout :: head"></head>
-<body th:fragment="content">
-    <div class="text-center">
-        <h1>Welcome to MANA Movie Studios!</h1>
-        <p class="lead">Discover and review your favorite movies!</p>
-        <a th:href="@{/register}" class="btn btn-primary">Register Now</a>
-        <a th:href="@{/movies}" class="btn btn-secondary">Browse Movies</a>
+<head th:replace="Common/layout :: head">
+    <title>MANA Movie Studios - Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body>
+<div th:fragment="content">
+    <!-- Hero Section -->
+	<section id="hero" class="relative bg-gradient-to-br from-blue-600 to-purple-600 text-white h-screen flex items-center">
+	    <div class="container mx-auto flex flex-col md:flex-row items-center px-4">
+	        <!-- Text Section -->
+	        <div class="md:w-1/2 text-center md:text-left">
+	            <h1 class="text-5xl md:text-6xl font-extrabold mb-6">
+	                Welcome to <span class="text-yellow-400">MANA Movie Studios</span>
+	            </h1>
+	            <p class="text-lg md:text-xl text-gray-200 mb-8">
+	                Discover, review, and manage your favorite movies all in one place.
+	            </p>
+	            <a href="#main-content" 
+	               class="px-8 py-4 bg-yellow-400 text-gray-900 font-semibold rounded-lg shadow-lg hover:bg-yellow-500 hover:shadow-xl transition">
+	                Browse Movies
+	            </a>
+	        </div>
+	        <!-- Image Section -->
+	        <div class="md:w-1/2 mt-10 md:mt-0">
+	            <div class="rounded-lg shadow-lg overflow-hidden">
+	                <img src="https://yesimadesigner.com/wp-content/uploads/2018/06/10.jpg" 
+	                     alt="Hero Image" 
+	                     class="w-full h-auto object-cover">
+	            </div>
+	        </div>
+	    </div>
+	    <!-- Scroll Indicator -->
+	    <div class="absolute bottom-4 left-0 right-0 flex justify-center">
+	        <a href="#main-content" class="text-gray-200 animate-bounce">
+	            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+	                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+	            </svg>
+	        </a>
+	    </div>
+	</section>
+
+	<div id="main-content"></div>
+	<div  th:replace="Common/navbar :: navbar"></div>
+	
+    <!-- Explore Movies Section -->
+    <section  class="py-16 bg-gray-100 dark:bg-gray-900">
+        <div class="container mx-auto flex flex-col md:flex-row items-center px-4">
+            <div class="md:w-1/2 mb-8 md:mb-0">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Explore Movies</h2>
+                <p class="text-gray-600 dark:text-gray-400 mb-6">
+                    Dive into our collection of movies across various categories and genres. Discover something new every day.
+                </p>
+                <a href="/movies/categories" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                    See Categories
+                </a>
+            </div>
+            <div class="md:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Browse by Category</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Explore Comedy, Action, Suspense, and more!</p>
+                    <a href="/movies/categories" class="text-blue-500 hover:text-blue-600 transition">Explore Now</a>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Search Movies</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Find movies by title or genre.</p>
+                    <a href="/movies/search" class="text-blue-500 hover:text-blue-600 transition">Search Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modern Section Divider -->
+    <div class="relative py-10 bg-gray-100 dark:bg-gray-900">
+        <div class="flex justify-center items-center">
+            <span class="inline-block bg-gradient-to-r from-green-500 via-teal-500 to-green-500 w-32 h-1"></span>
+            <span class="mx-4 text-gray-500 text-sm uppercase">Manage Reviews</span>
+            <span class="inline-block bg-gradient-to-r from-green-500 via-teal-500 to-green-500 w-32 h-1"></span>
+        </div>
     </div>
+
+    <!-- Manage Reviews Section -->
+    <section th:if="${#authentication.principal != null}" class="py-16 bg-gray-50 dark:bg-gray-900">
+        <div class="container mx-auto flex flex-col md:flex-row items-center px-4">
+            <div class="md:w-1/2">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Manage Reviews</h2>
+                <p class="text-gray-600 dark:text-gray-400 mb-6">
+                    Create, edit, or delete reviews for movies you've seen and share your opinions with others.
+                </p>
+                <a href="/reviews" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                    Manage Reviews
+                </a>
+            </div>
+            <div class="md:w-1/2 flex justify-center items-center">
+                <div class="bg-gray-800 dark:bg-gray-700 text-white text-center rounded-lg shadow-lg p-6 w-full hover:shadow-xl transition">
+                    <h3 class="text-xl font-semibold mb-4">Your Reviews Await</h3>
+                    <p class="text-gray-400 mb-4">Log in to manage your personal reviews or create new ones!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+	<!-- Modern Section Divider for Top 10 Movies -->
+	<div class="relative py-10 bg-gray-50 dark:bg-gray-900">
+	    <div class="flex justify-center items-center">
+	        <span class="inline-block bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 w-32 h-1"></span>
+	        <span class="mx-4 text-gray-500 text-sm uppercase">Top 10 Movies</span>
+	        <span class="inline-block bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 w-32 h-1"></span>
+	    </div>
+	</div>
+
+	<!-- Top 10 Movies Section -->
+	<section class="py-16 bg-gray-100 dark:bg-gray-900">
+	    <div class="container mx-auto px-4">
+	        <h2 class="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-white">Top 10 Movies</h2>
+	        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+	            <!-- Dynamic Movie Cards for Top Rated Movies -->
+	            <div th:each="movie : ${topRatedMovies}" 
+	                 class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105">
+	                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2" 
+	                    th:text="${movie.title}">Movie Title</h3>
+	                <p class="text-gray-600 dark:text-gray-400" 
+	                   th:text="${movie.genre} + ' | Rating: ' + ${movie.averageRating}">Genre | Rating</p>
+	            </div>
+	        </div>
+	    </div>
+	</section>
+
+	<!-- Modern Section Divider for Newest Additions -->
+	<div class="relative py-10 bg-gray-50 dark:bg-gray-900">
+	    <div class="flex justify-center items-center">
+	        <span class="inline-block bg-gradient-to-r from-green-500 via-teal-500 to-green-500 w-32 h-1"></span>
+	        <span class="mx-4 text-gray-500 text-sm uppercase">Newest Additions</span>
+	        <span class="inline-block bg-gradient-to-r from-green-500 via-teal-500 to-green-500 w-32 h-1"></span>
+	    </div>
+	</div>
+
+	<!-- Newest Additions Section -->
+	<section class="py-16 bg-gray-100 dark:bg-gray-900">
+	    <div class="container mx-auto px-4">
+	        <h2 class="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-white">Newest Additions</h2>
+	        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+	            <!-- Dynamic Movie Cards for Latest Movies -->
+	            <div th:each="movie : ${latestMovies}" 
+	                 class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105">
+	                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2" 
+	                    th:text="${movie.title}">Movie Title</h3>
+	                <p class="text-gray-600 dark:text-gray-400 mb-4" 
+	                   th:text="${movie.genre} + ' | Released: ' + ${movie.dateCreated.year}">Genre | Released: Year</p>
+	            </div>
+	        </div>
+	    </div>
+	</section>
+
+
+    <!-- Modern Section Divider -->
+    <div class="relative py-10 bg-gray-50 dark:bg-gray-900">
+        <div class="flex justify-center items-center">
+            <span class="inline-block bg-gradient-to-r from-red-500 via-pink-500 to-red-500 w-32 h-1"></span>
+            <span class="mx-4 text-gray-500 text-sm uppercase">What's Hot</span>
+            <span class="inline-block bg-gradient-to-r from-red-500 via-pink-500 to-red-500 w-32 h-1"></span>
+        </div>
+    </div>
+
+    <!-- What's Hot Section -->
+    <section class="py-16 bg-gray-100 dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-white">What's Hot</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                <!-- Example Movie Card -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Avatar: The Way of Water</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Adventure | Trending</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Everything Everywhere All at Once</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Comedy-Drama | Trending</p>
+                </div>
+                <!-- Add more movie cards as needed -->
+            </div>
+        </div>
+    </section>
+	<script>
+	    document.addEventListener("DOMContentLoaded", function () {
+	        const heroSection = document.getElementById("hero");
+	        const mainContent = document.getElementById("main-content");
+
+	        // Listen for scroll events
+	        window.addEventListener("scroll", () => {
+				 
+	            if (window.scrollY > heroSection.offsetHeight - 50) {
+	                heroSection.style.display = "none"; // Hide the hero section
+	            }
+	        });
+	    });
+	</script>
+
+</div>
 </body>
 </html>
