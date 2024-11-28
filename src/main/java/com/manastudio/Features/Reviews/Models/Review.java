@@ -19,6 +19,7 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Long id;
 
     @Getter
@@ -31,10 +32,15 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @Getter
+    @Setter
     private User user; // The user who created the review
 
     @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false)
+    @Getter
+    @Setter
     private Movie movie; // The movie being reviewed
+    
 
 }

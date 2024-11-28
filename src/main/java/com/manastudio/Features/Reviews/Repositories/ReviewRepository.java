@@ -1,5 +1,7 @@
 package com.manastudio.Features.Reviews.Repositories;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,4 +18,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     // Counts all reviews for a specific movie with a specific rating
     long countByMovieIdAndRating(Long movieId, int rating);
+    
+    long countByUserIdAndMovieId(Long userId, Long movieId);
+
+    List<Review> findByMovieId(Long movieId);
 }

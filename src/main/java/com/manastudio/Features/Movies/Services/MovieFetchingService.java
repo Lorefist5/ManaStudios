@@ -1,6 +1,9 @@
 package com.manastudio.Features.Movies.Services;
 
+import com.manastudio.Abstractions.Result;
 import com.manastudio.Features.Movies.Dtos.Fetch.GetMovieWithRatingDto;
+import com.manastudio.Features.Movies.Dtos.Fetch.MovieWithReviewsDto;
+import com.manastudio.Features.Movies.Exceptions.MovieNotFoundException;
 import com.manastudio.Features.Movies.Models.Movie;
 import com.manastudio.Features.Movies.Repositories.MovieRepository;
 import com.manastudio.Features.Reviews.Models.Review;
@@ -14,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +27,58 @@ public class MovieFetchingService {
     private MovieRepository movieRepository;
     @Autowired
     private ReviewRepository reviewRepository;
+ 
+    public List<MovieWithReviewsDto> fetchMoviesWithReviews() {
+        // Fetch all movies
+        List<Movie> movies = movieRepository.findAll();
+
+        // Map movies to MovieWithReviewsDto
+        return movies.stream()
+            .map(movie -> {
+                List<Review> reviews = reviewRepository.findByMovieId(movie.getId());
+                MovieWithReviewsDto dto = new MovieWithReviewsDto();
+                dto.setId(movie.getId());
+                dto.setTitle(movie.getTitle());
+                dto.setGenre(movie.getGenre());
+                dto.setPlot(movie.getPlot());
+                dto.setDirector(movie.getDirector());
+                dto.setActors(movie.getActors());
+                dto.setDateCreated(movie.getDateCreated());
+                dto.setReviews(reviews);
+                return dto;
+            })
+            .collect(Collectors.toList());
+    }
+    
+    public Result<MovieWithReviewsDto> fetchMovieWithReviews(Long movieId) {
+        Optional<Movie> movieOptional = movieRepository.findById(movieId);
+        if (!movieOptional.isPresent()) {
+            return Result.from(new MovieNotFoundException("Movie not found."));
+        }
+
+        Movie movie = movieOptional.get();
+        List<Review> reviews = reviewRepository.findByMovieId(movieId);
+
+        MovieWithReviewsDto movieWithReviewsDto = new MovieWithReviewsDto();
+        movieWithReviewsDto.setId(movie.getId());
+        movieWithReviewsDto.setTitle(movie.getTitle());
+        movieWithReviewsDto.setGenre(movie.getGenre());
+        movieWithReviewsDto.setPlot(movie.getPlot());
+        movieWithReviewsDto.setDirector(movie.getDirector());
+        movieWithReviewsDto.setActors(movie.getActors());
+        movieWithReviewsDto.setDateCreated(movie.getDateCreated());
+        movieWithReviewsDto.setReviews(reviews);
+
+        return Result.from(movieWithReviewsDto);
+    }
+    public Result<Movie> fetchMovieById(Long movieId){
+    	Optional<Movie> movieFetchedResults = movieRepository.findById(movieId);
+    	
+    	if(movieFetchedResults.isPresent() == false)
+    		return Result.from(new MovieNotFoundException("Movie id not found"));
+    	
+    	return Result.from(movieFetchedResults.get());
+    }
     /**
      * Fetches the latest movies created, sorted by creation date (newest first).
      * @param count Number of movies to fetch.

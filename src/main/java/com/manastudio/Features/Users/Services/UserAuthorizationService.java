@@ -42,6 +42,7 @@ public class UserAuthorizationService implements UserDetailsService {
 
         // Use the CustomUserDetails class to include firstName, lastName, email, and other fields
         return new CustomUserDetails(
+        		user.getId(),
                 user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),

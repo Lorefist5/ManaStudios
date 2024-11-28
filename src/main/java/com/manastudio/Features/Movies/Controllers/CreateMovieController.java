@@ -17,7 +17,7 @@ import com.manastudio.Features.Movies.Models.Movie;
 import com.manastudio.Features.Movies.Repositories.MovieRepository;
 
 @Controller
-public class MovieController {
+public class CreateMovieController {
 
     @Autowired
     private MovieRepository movieRepository;

@@ -23,11 +23,11 @@ public class HomeController {
         List<Movie> latestMovies = movieFetchingService.fetchLatestMovies(10);
 
         // Fetch the top-rated movies
-        //List<GetMovieWithRatingDto> topRatedMovies = movieFetchingService.fetchTopRatedMovies(10);
+        List<GetMovieWithRatingDto> topRatedMovies = movieFetchingService.fetchTopRatedMovies(10);
 
         // Add movies to the model
         model.addAttribute("latestMovies", latestMovies);
-        //model.addAttribute("topRatedMovies", topRatedMovies);
+        model.addAttribute("topRatedMovies", topRatedMovies);
 
         return "Common/home"; // This will map to the home.html template
     }
