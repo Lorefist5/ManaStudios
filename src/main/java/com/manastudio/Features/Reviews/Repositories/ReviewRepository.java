@@ -22,4 +22,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     long countByUserIdAndMovieId(Long userId, Long movieId);
 
     List<Review> findByMovieId(Long movieId);
+    void deleteByMovieId(Long movieId);
 }

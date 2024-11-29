@@ -71,13 +71,15 @@ public class MovieFetchingService {
 
         return Result.from(movieWithReviewsDto);
     }
+    
+    
     public Result<Movie> fetchMovieById(Long movieId){
     	Optional<Movie> movieFetchedResults = movieRepository.findById(movieId);
     	
     	if(movieFetchedResults.isPresent() == false)
-    		return Result.from(new MovieNotFoundException("Movie id not found"));
+    		return Result.failure(new MovieNotFoundException("Movie id not found"));
     	
-    	return Result.from(movieFetchedResults.get());
+    	return Result.success(movieFetchedResults.get());
     }
     /**
      * Fetches the latest movies created, sorted by creation date (newest first).
