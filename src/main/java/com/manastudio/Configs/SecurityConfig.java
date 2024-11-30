@@ -19,18 +19,20 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/register", "/css/**", "/js/**").permitAll() // Allow public access to register and static resources
-                .anyRequest().authenticated() // Require authentication for other endpoints
+                .requestMatchers("/", "/movies","/movies/{movieId}", "/register", "/css/**", "/js/**").permitAll()
+                .requestMatchers("/").permitAll()// Allow public access to home, register, and static resources
+                .anyRequest().authenticated() // Require authentication for all other endpoints
             )
             .formLogin(form -> form
-                    .loginPage("/login") // Use custom login page
-                    .defaultSuccessUrl("/", true) // Redirect to home page after successful login
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/",true)// Use custom login page // Redirect authenticated users to the home page
                     .permitAll()
-                )
+            )
             .logout(logout -> logout
                 .logoutUrl("/logout") // Specify logout URL
-                .logoutSuccessUrl("/login?logout=true") // Redirect to login page with logout parameter
-                .permitAll());
+                .logoutSuccessUrl("/login?logout=true") // Redirect to login page after logout
+                .permitAll())
+            .csrf(csrf -> csrf.disable()); // Optional: Disable CSRF if needed for debugging or specific use cases
 
         return http.build();
     }

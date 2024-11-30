@@ -12,7 +12,7 @@
         <!-- Title and Create Button -->
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-4xl font-extrabold text-blue-400">Explore Our Movies</h1>
-            <a th:if="${#authentication.principal != null}" href="/movies/create" 
+            <a th:if="${#authentication.principal != null and #authentication.principal != 'anonymousUser'}" href="/movies/create" 
                class="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition duration-300">
                 Create Movie
             </a>
@@ -67,7 +67,7 @@
                  class="bg-gray-800 rounded-xl shadow-lg border border-gray-700 p-6 transform hover:scale-105 hover:shadow-2xl transition duration-300 ease-in-out relative">
                  
                 <!-- Modern X Button (Only for Authenticated Users) -->
-                <form th:if="${#authentication.principal != null}" 
+                <form th:if="${#authentication.principal != null and #authentication.principal != 'anonymousUser'}" 
                       th:action="@{/movies/delete/{id}(id=${movie.id})}" 
                       method="post" 
                       class="absolute top-2 right-2 text-gray-400 hover:text-red-600">
@@ -129,7 +129,7 @@
                     </a>
 
                     <!-- Review Button (Only for Authenticated Users) -->
-                    <a th:if="${#authentication.principal != null}" th:href="@{/movies/{id}/review(id=${movie.id})}" 
+                    <a th:if="${#authentication.principal != null and #authentication.principal != 'anonymousUser'}" th:href="@{/movies/{id}/review(id=${movie.id})}" 
                        class="px-4 py-2 bg-yellow-500 text-gray-900 font-semibold rounded-lg shadow-md hover:bg-yellow-600 hover:shadow-lg transition duration-300">
                         Review Movie
                     </a>
