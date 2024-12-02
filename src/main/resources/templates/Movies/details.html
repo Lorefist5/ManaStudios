@@ -6,9 +6,12 @@
     <title th:text="${title}">Movie Details</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Flowbite CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+    <style>
+        .hover-scale:hover {
+            transform: scale(1.02);
+            transition: transform 0.2s ease-in-out;
+        }
+    </style>
 </head>
 <body class="bg-gray-900 text-gray-200">
 
@@ -16,64 +19,56 @@
 <div th:replace="Common/navbar :: navbar"></div>
 
 <!-- Main Content -->
-<div class="container mx-auto px-4 py-8 space-y-6">
+<div class="container mx-auto px-4 py-8 space-y-8">
     <!-- Go Back Button -->
     <div class="mb-4">
         <a href="/movies" 
-           class="px-4 py-2 bg-gray-700 text-gray-100 font-semibold rounded-lg shadow-md hover:bg-gray-800 transition duration-300">
+           class="px-4 py-2 bg-gray-800 text-gray-100 font-medium rounded-lg shadow hover:bg-gray-700 transition duration-300">
             Go Back
         </a>
     </div>
 
     <!-- Movie Title and Description -->
-    <div class="bg-gray-800 p-6 rounded-lg shadow-md">
-        <h1 class="text-4xl font-bold mb-4" th:text="${movie.title}">Movie Title</h1>
+    <div class="bg-gray-800 p-6 rounded-lg shadow ">
+        <h1 class="text-4xl font-bold text-white mb-4" th:text="${movie.title}">Movie Title</h1>
         <p class="text-lg text-gray-300" th:text="${movie.plot}">Movie plot...</p>
     </div>
 
     <!-- Average Rating -->
-    <div class="bg-gray-800 p-6 rounded-lg shadow-md">
-        <h2 class="text-2xl font-semibold mb-4">Average Rating:</h2>
+    <div class="bg-gray-800 p-6 rounded-lg shadow ">
+        <h2 class="text-2xl font-bold text-white mb-4">Average Rating:</h2>
         <div class="flex items-center">
-            <!-- Flowbite Star Rating -->
             <div class="flex space-x-1" th:each="star : ${#numbers.sequence(1, 5)}">
                 <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20"
-                     th:classappend="${star <= averageRating ? 'text-yellow-400' : 'text-gray-400'}">
+                     th:classappend="${star <= averageRating ? 'text-yellow-500' : 'text-gray-600'}">
                     <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
                 </svg>
             </div>
+            <span class="ml-3 text-lg font-bold text-white" th:text="'(' + ${averageRating} + '/5)'">4.5/5</span>
         </div>
-    </div>
-
-    <!-- Rating Breakdown -->
-    <div class="flex items-center mt-4" th:each="starPercentage : ${starPercentages}">
-        <a href="#" class="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline"
-           th:text="${starPercentage.starRating + ' star'}">5 star</a>
-        <div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-            <!-- Set width dynamically -->
-            <div class="h-5 bg-yellow-300 rounded" 
-                 th:style="'width: ' + starPercentage.percentage + '%'"></div>
-        </div>
-        <span class="text-sm font-medium text-gray-500 dark:text-gray-400" 
-              th:text="${starPercentage.percentage + '%'}">70%</span>
     </div>
 
     <!-- Reviews Section -->
-    <div class="bg-gray-800 p-6 rounded-lg shadow-md">
-        <h3 class="text-2xl font-semibold mb-4">User Reviews:</h3>
-        <div th:if="${#lists.isEmpty(reviews)}" class="text-gray-300 italic">No reviews available yet.</div>
+    <div class="bg-gray-800 p-6 rounded-lg shadow hover-scale">
+        <h3 class="text-2xl font-bold text-white mb-4">User Reviews:</h3>
+        <div th:if="${#lists.isEmpty(reviews)}" class="text-gray-400 italic">No reviews available yet.</div>
         <div th:each="review : ${reviews}" class="mb-4">
-            <div class="bg-gray-700 p-4 rounded-lg shadow">
-                <h4 class="font-bold text-lg" th:text="${review.user.username}">User Name</h4>
-                <p class="text-sm text-gray-300" th:text="${review.summary}">Review Summary...</p>
+            <div class="bg-gray-700 p-4 rounded-lg shadow hover:bg-gray-600 transition">
+                <!-- Clickable Username -->
+                <h4 class="font-bold text-lg text-yellow-400">
+                    <a th:href="@{/reviews/list(userId=${review.user.id})}" 
+                       class="hover:underline" 
+                       th:text="${review.user.username}">User Name</a>
+                </h4>
+                <p class="text-sm text-gray-300 mt-2" th:text="${review.summary}">Review Summary...</p>
                 <div class="flex items-center mt-2">
-                    <div class="flex" th:each="star : ${#numbers.sequence(1, 5)}">
+                    <div class="flex space-x-1" th:each="star : ${#numbers.sequence(1, 5)}">
                         <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                             viewBox="0 0 22 20" th:classappend="${star <= review.rating ? 'text-yellow-400' : 'text-gray-400'}">
+                             viewBox="0 0 22 20" th:classappend="${star <= review.rating ? 'text-yellow-500' : 'text-gray-500'}">
                             <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
                         </svg>
                     </div>
-                    <span class="ml-2 text-sm text-gray-300" th:text="'(' + ${review.rating} + '/5)'">4/5</span>
+                    <span class="ml-3 text-sm text-gray-300" th:text="'(' + ${review.rating} + '/5)'">4/5</span>
                 </div>
             </div>
         </div>
@@ -81,6 +76,5 @@
 </div>
 
 <!-- Footer -->
-<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
 </body>
 </html>

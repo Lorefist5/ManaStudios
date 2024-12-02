@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="Common/layout :: head">
+    <title>Edit Review</title>
+</head>
+<body class="bg-gray-900 text-gray-200">
+    <!-- Navbar -->
+    <div th:replace="Common/navbar :: navbar"></div>
+
+    <div class="container mx-auto p-6">
+        <h1 class="text-4xl font-extrabold text-blue-400 mb-8">Edit Review</h1>
+
+        <!-- Error Message -->
+        <div th:if="${error}" class="text-center">
+            <p class="text-red-500 font-semibold text-lg" th:text="${error}"></p>
+        </div>
+
+        <!-- Review Edit Form -->
+        <form th:action="@{/reviews/edit/{reviewId}(reviewId=${review.id})}" th:object="${review}" method="post" class="bg-gray-800 rounded-lg shadow-md p-6">
+            <!-- Summary Field -->
+            <div class="mb-4">
+                <label for="summary" class="block text-sm font-medium text-gray-300 mb-2">Summary</label>
+                <textarea id="summary" name="summary" th:field="*{summary}" rows="4"
+                          class="w-full p-2 rounded bg-gray-700 border border-gray-600 text-gray-300"
+                          placeholder="Enter your review summary"></textarea>
+            </div>
+
+            <!-- Rating Field -->
+            <div class="mb-4">
+                <label for="rating" class="block text-sm font-medium text-gray-300 mb-2">Rating</label>
+                <input type="number" id="rating" name="rating" th:field="*{rating}" min="1" max="5"
+                       class="w-full p-2 rounded bg-gray-700 border border-gray-600 text-gray-300"
+                       placeholder="Enter a rating between 1 and 5" />
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mt-4">
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

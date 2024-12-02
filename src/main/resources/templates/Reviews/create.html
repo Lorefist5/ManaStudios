@@ -4,39 +4,80 @@
     <title>Create Review</title>
 </head>
 <body class="bg-gray-900 text-gray-200">
+    <!-- Navbar -->
     <div th:replace="Common/navbar :: navbar"></div>
 
-    <div class="container mx-auto p-6 bg-gray-800 rounded-lg shadow-lg mt-8">
-        <h1 class="text-3xl font-bold text-gray-100 mb-6" th:text="'Review for ' + ${movie.title}">Review</h1>
+    <!-- Main Section -->
+    <div class="container mx-auto mt-10">
+		<!-- Error Message -->
+		<div th:if="${error}" class="text-center">
+		    <p class="text-red-500 font-semibold text-lg" th:text="${error}"></p>
+		</div>
 
-        <form th:action="@{/movies/{movieId}/review(movieId=${movie.id})}" th:object="${review}" method="post" class="space-y-6">
-            <!-- Summary -->
-            <div>
-                <label for="summary" class="block text-sm font-medium text-gray-300">Summary</label>
-                <textarea id="summary" th:field="*{summary}" 
-                          class="mt-1 block w-full p-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-100" 
-                          placeholder="Write your review here..."></textarea>
-                <p th:if="${#fields.hasErrors('summary')}" th:errors="*{summary}" 
-                   class="text-red-400 text-sm mt-1"></p>
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-white" th:text="'Review for ' + ${movie.title}">Create a Review</h1>
+            <p class="text-gray-400 mt-3">Share your thoughts and rate the movie.</p>
+        </div>
+
+        <!-- Go Back Button -->
+        <div class="mb-6">
+            <a href="/movies" 
+               class="px-4 py-2 bg-gray-700 text-gray-100 font-semibold rounded-lg shadow-md hover:bg-gray-800 transition duration-300">
+                Go Back
+            </a>
+        </div>
+
+        <!-- Content -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            <!-- Left Section -->
+            <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold text-gray-100 mb-4">Tips for Writing Reviews</h2>
+                <ul class="list-disc pl-5 text-gray-400 space-y-2">
+                    <li>Keep your review concise and focused on the key aspects of the movie.</li>
+                    <li>Use examples from the movie to support your opinion.</li>
+                    <li>Give an honest rating between 0 and 5 stars.</li>
+                </ul>
+                <div class="mt-6">
+                    <p class="text-sm text-gray-400">
+                        <strong>Example:</strong> "The plot was engaging, and the visuals were stunning. I particularly loved the lead actor's performance."
+                    </p>
+                </div>
             </div>
 
-            <!-- Rating -->
-            <div>
-                <label for="rating" class="block text-sm font-medium text-gray-300">Rating (0-5)</label>
-                <input type="number" id="rating" th:field="*{rating}" min="0" max="5"
-                       class="mt-1 block w-full p-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-100">
-                <p th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}" 
-                   class="text-red-400 text-sm mt-1"></p>
-            </div>
+            <!-- Right Section: Form -->
+            <div class="bg-gray-800 border border-gray-700 p-6 rounded-lg shadow-lg">
+                <form th:action="@{/movies/{movieId}/review(movieId=${movie.id})}" th:object="${review}" method="post" class="space-y-6">
+                    <!-- Summary -->
+                    <div>
+                        <label for="summary" class="block text-lg font-medium text-gray-300 mb-2">Review Summary</label>
+                        <textarea id="summary" th:field="*{summary}" 
+                                  class="w-full p-3 border border-gray-600 rounded-lg bg-gray-900 text-gray-100 focus:ring-2 focus:ring-blue-500 focus:outline-none transition resize-none h-32" 
+                                  placeholder="Write your review summary here..."></textarea>
+                        <p th:if="${#fields.hasErrors('summary')}" th:errors="*{summary}" 
+                           class="text-red-400 text-sm mt-2"></p>
+                    </div>
 
-            <!-- Submit Button -->
-            <div class="text-center">
-                <button type="submit" 
-                        class="px-6 py-2 bg-yellow-400 text-gray-900 font-semibold rounded-lg shadow hover:bg-yellow-500 hover:shadow-md transition">
-                    Submit Review
-                </button>
+                    <!-- Rating -->
+                    <div>
+                        <label for="rating" class="block text-lg font-medium text-gray-300 mb-2">Rating (0-5)</label>
+                        <input type="number" id="rating" th:field="*{rating}" min="0" max="5"
+                               class="w-full p-3 border border-gray-600 rounded-lg bg-gray-900 text-gray-100 focus:ring-2 focus:ring-blue-500 focus:outline-none transition" 
+                               placeholder="Rate the movie out of 5">
+                        <p th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}" 
+                           class="text-red-400 text-sm mt-2"></p>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" 
+                                class="px-6 py-2 bg-blue-600 text-gray-100 font-bold rounded-full shadow-lg hover:bg-blue-700 hover:shadow-xl transition transform hover:scale-105">
+                            Submit Review
+                        </button>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 </body>
 </html>

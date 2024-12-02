@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="Common/layout :: head">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+    <div th:replace="Common/navbar :: navbar"></div>
+
+    <div class="container mx-auto p-6 grid grid-cols-12 gap-6">
+        <!-- Left Side: User Info Card -->
+        <div class="col-span-4 bg-gray-800 rounded-lg shadow-md p-6 flex flex-col justify-between">
+            <!-- Profile Picture and Name -->
+            <div>
+                <div class="flex flex-col items-center mb-6">
+                    <div class="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-600 overflow-hidden flex items-center justify-center hover:ring-2 hover:ring-yellow-400 transition">
+                        <span class="text-3xl font-bold text-gray-600 dark:text-gray-300">
+                            <span th:text="${user.firstName.substring(0,1)} + ${user.lastName.substring(0,1)}"></span>
+                        </span>
+                    </div>
+                    <h2 class="text-xl font-bold text-yellow-400 mt-4" th:text="${user.firstName} + ' ' + ${user.lastName}">User Name</h2>
+                </div>
+
+                <!-- Sections -->
+                <!-- Email Section -->
+                <div class="bg-gray-700 rounded-lg p-4 mb-4">
+                    <h3 class="text-sm font-semibold text-gray-400">Email</h3>
+                    <div class="flex justify-between items-center">
+                        <p class="text-gray-300 text-sm" th:text="${user.email}">andres@gmail.com</p>
+                        <a th:href="@{/user/edit/email}" 
+                           class="inline-block px-3 py-1 bg-yellow-500 text-gray-900 font-semibold rounded-lg shadow-md hover:bg-yellow-600 transition text-sm">
+                            Change
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Username Section -->
+                <div class="bg-gray-700 rounded-lg p-4 mb-4">
+                    <h3 class="text-sm font-semibold text-gray-400">Username</h3>
+                    <div class="flex justify-between items-center">
+                        <p class="text-gray-300 text-sm" th:text="${user.username}">Andres3</p>
+                        <a th:href="@{/user/edit/username}" 
+                           class="inline-block px-3 py-1 bg-yellow-500 text-gray-900 font-semibold rounded-lg shadow-md hover:bg-yellow-600 transition text-sm">
+                            Change
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Birthdate Section -->
+                <div class="bg-gray-700 rounded-lg p-4 mb-4">
+                    <h3 class="text-sm font-semibold text-gray-400">Birthdate</h3>
+                    <div class="flex justify-between items-center">
+                        <p class="text-gray-300 text-sm" th:text="${user.dateOfBirth}">2003-12-25</p>
+                        <a th:href="@{/user/edit/birthdate}" 
+                           class="inline-block px-3 py-1 bg-yellow-500 text-gray-900 font-semibold rounded-lg shadow-md hover:bg-yellow-600 transition text-sm">
+                            Change
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Role Section -->
+                <div class="bg-gray-700 rounded-lg p-4 mb-4">
+                    <h3 class="text-sm font-semibold text-gray-400">Role</h3>
+                    <p class="text-gray-300 text-sm" th:text="${user.role}">USER</p>
+                </div>
+            </div>
+
+            <!-- Logout Button -->
+            <div class="mt-4 text-left">
+                <a th:href="@{/logout}" 
+                   class="inline-block px-6 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition">
+                    Logout
+                </a>
+            </div>
+        </div>
+
+        <!-- Right Side: User Activity -->
+        <div class="col-span-8 bg-gray-800 rounded-lg shadow-md p-6">
+            <!-- Last Movies Created -->
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-yellow-400">Last 3 Movies Created</h3>
+                    <a th:href="@{/movies/list(userId=${user.id})}" 
+                       class="inline-block px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition text-sm">
+                        View All Movies
+                    </a>
+                </div>
+                <ul class="divide-y divide-gray-700">
+                    <li class="py-2">
+                        <h4 class="text-lg font-semibold text-blue-400">Movie Title 1</h4>
+                        <p class="text-sm text-gray-400">Genre: Action | Director: John Doe</p>
+                        <p class="text-sm text-gray-400">Created on: 2024-12-01</p>
+                    </li>
+                    <li class="py-2">
+                        <h4 class="text-lg font-semibold text-blue-400">Movie Title 2</h4>
+                        <p class="text-sm text-gray-400">Genre: Comedy | Director: Jane Doe</p>
+                        <p class="text-sm text-gray-400">Created on: 2024-11-28</p>
+                    </li>
+                    <li class="py-2">
+                        <h4 class="text-lg font-semibold text-blue-400">Movie Title 3</h4>
+                        <p class="text-sm text-gray-400">Genre: Drama | Director: James Smith</p>
+                        <p class="text-sm text-gray-400">Created on: 2024-11-25</p>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Last Reviews Created -->
+            <div>
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-yellow-400">Last 3 Reviews</h3>
+                    <a th:href="@{/reviews/list(userId=${user.id})}" 
+                       class="inline-block px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition text-sm">
+                        View All Reviews
+                    </a>
+                </div>
+                <ul class="divide-y divide-gray-700">
+                    <li class="py-2">
+                        <h4 class="text-lg font-semibold text-blue-400">Review for "Movie Title 1"</h4>
+                        <p class="text-sm text-gray-400">Rating: 4/5</p>
+                        <p class="text-sm text-gray-400">"Amazing movie with great action scenes!"</p>
+                    </li>
+                    <li class="py-2">
+                        <h4 class="text-lg font-semibold text-blue-400">Review for "Movie Title 2"</h4>
+                        <p class="text-sm text-gray-400">Rating: 5/5</p>
+                        <p class="text-sm text-gray-400">"Hilarious from start to finish. Loved it!"</p>
+                    </li>
+                    <li class="py-2">
+                        <h4 class="text-lg font-semibold text-blue-400">Review for "Movie Title 3"</h4>
+                        <p class="text-sm text-gray-400">Rating: 3/5</p>
+                        <p class="text-sm text-gray-400">"Decent storyline but could be better."</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -34,27 +34,24 @@
                 <li>
                     <a href="/movies" class="block py-2 px-4 text-gray-200 hover:text-yellow-400 transition">Movies</a>
                 </li>
-                <li th:if="${#authentication.principal != null}">
-                    <a href="/reviews" class="block py-2 px-4 text-gray-200 hover:text-yellow-400 transition">My Reviews</a>
-                </li>
-                <li>
-                    <a href="/about" class="block py-2 px-4 text-gray-200 hover:text-yellow-400 transition">About Us</a>
+                <li th:if="${#authentication.principal != null and #authentication.principal != 'anonymousUser'}">
+                    <!-- "My Reviews" Link -->
+                    <a th:href="@{/reviews/list(userId=${#authentication.principal.id})}" 
+                       class="block py-2 px-4 text-gray-200 hover:text-yellow-400 transition">My Reviews</a>
                 </li>
             </ul>
+			
         </div>
 
-        <!-- Profile or Login -->
-        <div class="flex items-center space-x-4">
-            <!-- Login Button -->
-            <a href="/login" th:if="${#authentication.principal == null or #authentication.principal == 'anonymousUser'}"
-               class="bg-yellow-400 text-gray-900 px-4 py-2 rounded shadow hover:bg-yellow-500 transition">Login</a>
-
-            <!-- Profile Avatar -->
-			<div th:if="${#authentication.principal != null and #authentication.principal != 'anonymousUser'}" class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-			    <span class="font-medium text-gray-600 dark:text-gray-300">
-			        <span th:text="${#authentication.principal.firstName.substring(0,1)} + ${#authentication.principal.lastName.substring(0,1)}"></span>
-			    </span>
-			</div>
+        
+		<div th:if="${#authentication.principal != null and #authentication.principal != 'anonymousUser'}" 
+		     class="relative w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-600 overflow-hidden flex items-center justify-center hover:ring-2 hover:ring-yellow-400 transition">
+		    <a th:href="@{/user/profile(userId=${#authentication.principal.id})}" class="absolute inset-0 flex items-center justify-center">
+		        <span class="text-lg font-semibold text-gray-600 dark:text-gray-300">
+		            <span th:text="${#authentication.principal.firstName.substring(0,1)} + ${#authentication.principal.lastName.substring(0,1)}"></span>
+		        </span>
+		    </a>
+		</div>
 
         </div>
     </div>

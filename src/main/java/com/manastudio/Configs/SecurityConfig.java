@@ -19,7 +19,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/", "/movies","/movies/{movieId}", "/register", "/css/**", "/js/**").permitAll()
+                .requestMatchers("/", "/movies","/movies/{movieId}","/forgot-password", "/register", "/css/**", "/js/**").permitAll()
                 .requestMatchers("/").permitAll()// Allow public access to home, register, and static resources
                 .anyRequest().authenticated() // Require authentication for all other endpoints
             )

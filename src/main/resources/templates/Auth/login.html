@@ -70,9 +70,17 @@
                     </button>
                 </div>
             </form>
-            <div class="text-center mt-4">
-                <p class="text-gray-300">Don't have an account? <a th:href="@{/register}" class="text-blue-400 underline">Create an Account</a></p>
-            </div>
+			<div class="text-center mt-4">
+			    <p class="text-gray-300">
+			        Don't have an account? 
+			        <a th:href="@{/register}" class="text-blue-400 underline">Create an Account</a>
+			    </p>
+			    <p class="text-gray-300 mt-2">
+			        Forgot your password? 
+			        <a th:href="@{/forgot-password}" class="text-blue-400 underline">Reset it here</a>
+			    </p>
+			</div>
+
         </div>
     </div>
 

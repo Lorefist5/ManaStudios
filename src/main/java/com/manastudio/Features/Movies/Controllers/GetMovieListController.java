@@ -22,28 +22,62 @@ public class GetMovieListController {
     private List<MovieWithReviewsDto> allMovies; // Cache for all movies
 
     @GetMapping("/movies")
-    public String getMoviesWithReviews(Model model) {
-        // Fetch and cache all movies
-      
-    	allMovies = movieFetchingService.fetchMoviesWithReviews();
-        
+    public String getMoviesWithReviews(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "genre", required = false) String genre,
+            @RequestParam(value = "rating", required = false) Double rating,
+            @RequestParam(value = "query", required = false) String query,
+            Model model) {
 
-        model.addAttribute("movies", allMovies);
-        return "Movies/list";
-    }
+        // Fetch genres
+        List<String> genres = movieFetchingService.fetchAllCategories();
+        model.addAttribute("genres", genres);
 
-    @GetMapping("/movies/search")
-    public String searchMovies(@RequestParam("query") String query, Model model) {
-        if (allMovies == null) {
-            allMovies = movieFetchingService.fetchMoviesWithReviews();
+        // Fetch movies
+        List<MovieWithReviewsDto> allMovies = movieFetchingService.fetchMoviesWithReviews();
+        List<MovieWithReviewsDto> filteredMovies = allMovies;
+
+        // Apply search filter
+        if (query != null && !query.isEmpty()) {
+            filteredMovies = filteredMovies.stream()
+                    .filter(movie -> movie.getTitle().toLowerCase().contains(query.toLowerCase()))
+                    .collect(Collectors.toList());
         }
 
-        // Filter movies based on the search query
-        List<MovieWithReviewsDto> filteredMovies = allMovies.stream()
-                .filter(movie -> movie.getTitle().toLowerCase().contains(query.toLowerCase()))
-                .collect(Collectors.toList());
+        // Apply genre filter
+        if (genre != null && !genre.isEmpty()) {
+            filteredMovies = filteredMovies.stream()
+                    .filter(movie -> movie.getGenre().equalsIgnoreCase(genre))
+                    .collect(Collectors.toList());
+        }
 
-        model.addAttribute("movies", filteredMovies);
+        // Apply rating filter
+        if (rating != null) {
+            filteredMovies = filteredMovies.stream()
+                    .filter(movie -> movie.getAverageRating() >= rating)
+                    .collect(Collectors.toList());
+        }
+
+        // Pagination logic
+        int totalMovies = filteredMovies.size();
+        int totalPages = (int) Math.ceil((double) totalMovies / size);
+        int startIndex = (page - 1) * size;
+        int endIndex = Math.min(startIndex + size, totalMovies);
+        List<MovieWithReviewsDto> paginatedMovies = filteredMovies.subList(startIndex, endIndex);
+
+        // Add attributes to the model
+        model.addAttribute("movies", paginatedMovies);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalMovies", totalMovies);
+
+        // Add active filters
+        model.addAttribute("activeQuery", query);
+        model.addAttribute("activeGenre", genre);
+        model.addAttribute("activeRating", rating);
+
         return "Movies/list";
     }
+
 }

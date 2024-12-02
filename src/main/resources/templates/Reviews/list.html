@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="Common/layout :: head">
+    <title>User Reviews</title>
+</head>
+<body class="bg-gray-900 text-gray-200">
+    <!-- Navbar -->
+    <div th:replace="Common/navbar :: navbar"></div>
+
+    <div class="container mx-auto p-6">
+        <h1 class="text-4xl font-extrabold text-blue-400 mb-8">User Reviews</h1>
+
+        <!-- Error Message -->
+        <div th:if="${error}" class="text-center">
+            <p class="text-red-500 font-semibold text-lg" th:text="${error}"></p>
+        </div>
+
+        <!-- Reviews Grid -->
+        <div th:if="${reviews}" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <!-- Single Review Card -->
+            <div th:each="review : ${reviews}" class="bg-gray-800 rounded-lg shadow-md p-6 relative">
+                
+                <!-- Edit Button (Visible Only to Review Owner) -->
+                <a th:if="${#authentication.principal != null 
+                           and review.user.username == #authentication.principal.username}" 
+                   th:href="@{/reviews/edit/{reviewId}(reviewId=${review.id})}" 
+                   class="absolute top-2 left-2 text-gray-400 hover:text-yellow-500 transition">
+                    <!-- New Edit Icon -->
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9m-9 0l4-4m-4 4L9 16m-3 4H4a1 1 0 01-1-1v-3.414a1 1 0 01.293-.707l12-12a1 1 0 011.414 0l3.414 3.414a1 1 0 010 1.414l-12 12A1 1 0 015.414 21H4z"/>
+                    </svg>
+                </a>
+
+                <!-- Delete Button (Visible Only to Review Owner) -->
+                <form th:if="${#authentication.principal != null 
+                              and review.user.username == #authentication.principal.username}" 
+                      th:action="@{/reviews/delete/{reviewId}(reviewId=${review.id})}" 
+                      method="post" 
+                      class="absolute top-2 right-2 text-gray-400 hover:text-red-600">
+                    <button type="submit">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </form>
+
+                <!-- Main Content -->
+                <div class="mt-8">
+                    <!-- Movie Title -->
+                    <h2 class="text-xl font-bold text-yellow-400 mb-2" th:text="${review.movie.title}">Movie Title</h2>
+
+                    <!-- Review Summary -->
+                    <p class="text-gray-300 mb-4 line-clamp-3" th:text="${review.summary}">Review Summary...</p>
+
+                    <!-- Rating -->
+                    <p class="text-sm text-gray-400">
+                        <span class="font-semibold text-gray-300">Rating:</span> 
+                        <span th:text="${review.rating}">5</span>/5
+                    </p>
+
+                    <!-- Reviewer Name -->
+                    <p class="text-sm text-gray-400 mt-2">
+                        <span class="font-semibold text-gray-300">Reviewer:</span> 
+                        <span th:text="${review.user.firstName} + ' ' + ${review.user.lastName}">John Doe</span>
+                    </p>
+
+                    <!-- Check Movie Out Button -->
+                    <div class="mt-4">
+                        <a th:href="@{/movies/{id}(id=${review.movie.id})}" 
+                           class="block px-4 py-2 text-center bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition duration-300">
+                            Check Movie Out
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Single Review Card -->
+        </div>
+
+        <!-- No Reviews -->
+        <div th:if="${reviews.empty}" class="text-center">
+            <p class="text-gray-400 text-lg">This user hasn't written any reviews yet.</p>
+        </div>
+    </div>
+</body>
+</html>
