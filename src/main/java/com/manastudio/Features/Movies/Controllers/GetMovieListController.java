@@ -23,8 +23,6 @@ public class GetMovieListController {
 
     @GetMapping("/movies")
     public String getMoviesWithReviews(
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,
             @RequestParam(value = "genre", required = false) String genre,
             @RequestParam(value = "rating", required = false) Double rating,
             @RequestParam(value = "query", required = false) String query,
@@ -59,25 +57,14 @@ public class GetMovieListController {
                     .collect(Collectors.toList());
         }
 
-        // Pagination logic
-        int totalMovies = filteredMovies.size();
-        int totalPages = (int) Math.ceil((double) totalMovies / size);
-        int startIndex = (page - 1) * size;
-        int endIndex = Math.min(startIndex + size, totalMovies);
-        List<MovieWithReviewsDto> paginatedMovies = filteredMovies.subList(startIndex, endIndex);
-
         // Add attributes to the model
-        model.addAttribute("movies", paginatedMovies);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("totalMovies", totalMovies);
-
-        // Add active filters
+        model.addAttribute("movies", filteredMovies);
         model.addAttribute("activeQuery", query);
         model.addAttribute("activeGenre", genre);
         model.addAttribute("activeRating", rating);
 
         return "Movies/list";
     }
+
 
 }

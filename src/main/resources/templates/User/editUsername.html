@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="Common/layout :: head">
+    <title>Edit Username</title>
+</head>
+<body class="bg-gray-900 text-gray-200">
+<div th:replace="Common/navbar :: navbar"></div>
+
+<div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold text-yellow-400 mb-6">Edit Username</h1>
+
+    <!-- Error Message -->
+	<div th:if="${error}" class="bg-red-500 text-white text-center font-semibold p-4 mb-6 rounded-lg shadow-md">
+	    <p th:text="${error}"></p>
+	</div>
+	
+    <!-- Success Message -->
+    <div th:if="${success}" class="bg-green-500 text-white text-center font-semibold p-4 mb-6 rounded-lg shadow-md">
+        <p th:text="${success}"></p>
+    </div>
+
+    <form th:action="@{/user/edit/username}" method="post" th:object="${usernameForm}" class="bg-gray-800 p-6 rounded-lg shadow-md">
+        <!-- Username Field -->
+        <div class="mb-4">
+            <label for="newUsername" class="block text-sm font-medium text-gray-300">New Username</label>
+            <input type="text" id="newUsername" name="newUsername"
+                   th:field="*{newUsername}"
+                   class="mt-1 p-2 block w-full bg-gray-700 border border-gray-600 rounded-md text-gray-300"
+                   placeholder="Enter new username">
+            <p th:if="${#fields.hasErrors('newUsername')}" th:errors="*{newUsername}" class="text-red-500 text-sm"></p>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="mt-6">
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition">
+                Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

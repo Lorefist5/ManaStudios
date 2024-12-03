@@ -35,6 +35,7 @@ public class MovieFetchingService {
                 .sorted(String::compareToIgnoreCase) // Sort alphabetically
                 .collect(Collectors.toList());
     }
+    
     public List<MovieWithReviewsDto> fetchMoviesWithReviews() {
         List<Movie> movies = movieRepository.findAll();
 

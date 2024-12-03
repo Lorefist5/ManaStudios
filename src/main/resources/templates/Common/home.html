@@ -53,7 +53,7 @@
                 <p class="text-gray-600 dark:text-gray-400 mb-6">
                     Dive into our collection of movies across various categories and genres. Discover something new every day.
                 </p>
-                <a href="/movies/categories" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                <a href="/movies" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
                     See Categories
                 </a>
             </div>
@@ -61,12 +61,12 @@
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Browse by Category</h3>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">Explore Comedy, Action, Suspense, and more!</p>
-                    <a href="/movies/categories" class="text-blue-500 hover:text-blue-600 transition">Explore Now</a>
+                    <a href="/movies" class="text-blue-500 hover:text-blue-600 transition">Explore Now</a>
                 </div>
                 <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Search Movies</h3>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">Find movies by title or genre.</p>
-                    <a href="/movies/search" class="text-blue-500 hover:text-blue-600 transition">Search Now</a>
+                    <a href="/movies" class="text-blue-500 hover:text-blue-600 transition">Search Now</a>
                 </div>
             </div>
         </div>
@@ -89,7 +89,7 @@
                 <p class="text-gray-600 dark:text-gray-400 mb-6">
                     Create, edit, or delete reviews for movies you've seen and share your opinions with others.
                 </p>
-                <a href="/reviews" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                <a th:href="@{/reviews/list(userId=${#authentication.principal.id})}"  class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
                     Manage Reviews
                 </a>
             </div>
@@ -164,23 +164,15 @@
     </div>
 
     <!-- What's Hot Section -->
-    <section class="py-16 bg-gray-100 dark:bg-gray-900">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-white">What's Hot</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                <!-- Example Movie Card -->
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Avatar: The Way of Water</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Adventure | Trending</p>
-                </div>
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:scale-105">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Everything Everywhere All at Once</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Comedy-Drama | Trending</p>
-                </div>
-                <!-- Add more movie cards as needed -->
-            </div>
-        </div>
-    </section>
+	<section class="py-16 bg-gray-100 dark:bg-gray-900">
+	    <div class="container mx-auto px-4">
+	        <h2 class="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-white">What's Hot</h2>
+	        <div class="flex justify-center items-center bg-gray-800 p-6 rounded-lg shadow-lg">
+	            <p class="text-lg font-semibold text-gray-300">Coming Soon...</p>
+	        </div>
+	    </div>
+	</section>
+
 	<script>
 	    document.addEventListener("DOMContentLoaded", function () {
 	        const heroSection = document.getElementById("hero");

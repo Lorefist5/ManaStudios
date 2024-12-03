@@ -21,11 +21,25 @@ services:
     restart: always
     environment:
       PMA_HOST: mysql
-      PMA_PORT: 3306c
+      PMA_PORT: 3306
     ports:
       - "8080:80"
     depends_on:
       - mysql
+
+  springboot-app:
+    build:
+      context: ..
+      dockerfile: ./dockerFiles/Dockerfile
+    container_name: springboot-container
+    depends_on:
+      - mysql
+    ports:
+      - "9090:9090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/ManaStudioDatabase
+      SPRING_DATASOURCE_USERNAME: your_user
+      SPRING_DATASOURCE_PASSWORD: your_password
 
 volumes:
   mysql_data:

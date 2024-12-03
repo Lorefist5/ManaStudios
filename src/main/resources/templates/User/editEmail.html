@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="Common/layout :: head">
+    <title>Change Email</title>
+</head>
+<body class="bg-gray-900 text-gray-200">
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-4 text-yellow-400">Change Email</h1>
+		<div th:if="${error}" class="bg-red-500 text-white text-center font-semibold p-4 mb-6 rounded-lg shadow-md">
+		    <p th:text="${error}"></p>
+		</div>
+        <form action="#" method="post" th:object="${emailForm}" class="space-y-4">
+            <div>
+                <label for="newEmail" class="text-sm font-semibold">New Email:</label>
+                <input type="email" id="newEmail" th:field="*{newEmail}" 
+                       class="w-full p-2 rounded bg-gray-800 border border-gray-700 text-gray-300" />
+                <p th:if="${#fields.hasErrors('newEmail')}" th:errors="*{newEmail}" class="text-red-400"></p>
+            </div>
+            <button type="submit" 
+                    class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition">
+                Update Email
+            </button>
+        </form>
+    </div>
+</body>
+</html>

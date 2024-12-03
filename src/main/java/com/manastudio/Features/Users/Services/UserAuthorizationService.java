@@ -42,12 +42,13 @@ public class UserAuthorizationService implements UserDetailsService {
 
         // Use the CustomUserDetails class to include firstName, lastName, email, and other fields
         return new CustomUserDetails(
-        		user.getId(),
+                user.getId(),
                 user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),
                 user.getFirstName(),
                 user.getLastName(),
+                user.getDateOfBirth(), // Pass the dateOfBirth
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole()))
         );
     }

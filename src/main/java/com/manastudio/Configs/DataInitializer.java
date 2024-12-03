@@ -1,6 +1,7 @@
 package com.manastudio.Configs;
 
 
+import com.github.javafaker.Faker;
 import com.manastudio.Features.Movies.Models.Movie;
 import com.manastudio.Features.Movies.Repositories.MovieRepository;
 import com.manastudio.Features.Reviews.Models.Review;
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 @Component
 public class DataInitializer {
 
@@ -31,68 +34,54 @@ public class DataInitializer {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @PostConstruct
-    public void seedData() {
+    public void seedDataWithFaker() {
         if (userRepository.count() > 0 || movieRepository.count() > 0 || reviewRepository.count() > 0) {
             return;
         }
 
-        // Create Users
-        User user1 = new User();
-        user1.setFirstName("John");
-        user1.setLastName("Doe");
-        user1.setUsername("johndoe");
-        user1.setEmail("john.doe@example.com");
-        user1.setPassword(passwordEncoder.encode("password123"));
-        user1.setDateOfBirth(LocalDate.of(1990, 1, 15));
+        Faker faker = new Faker();
 
-        User user2 = new User();
-        user2.setFirstName("Jane");
-        user2.setLastName("Smith");
-        user2.setUsername("janesmith");
-        user2.setEmail("jane.smith@example.com");
-        user2.setPassword(passwordEncoder.encode("securepassword"));
-        user2.setDateOfBirth(LocalDate.of(1985, 5, 20));
+        // Create Random Users
+        List<User> users = new ArrayList();
+        for (int i = 0; i < 40; i++) {
+            User user = new User();
+            user.setFirstName(faker.name().firstName());
+            user.setLastName(faker.name().lastName());
+            user.setUsername(faker.internet().emailAddress());
+            user.setEmail(faker.internet().emailAddress());
+            user.setPassword(passwordEncoder.encode("password" + i));
+            user.setDateOfBirth(LocalDate.now().minusYears(20));
+            users.add(user);
+        }
+        userRepository.saveAll(users);
 
-        userRepository.saveAll(Arrays.asList(user1, user2));
+        // Create Random Movies
+        List<Movie> movies = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            Movie movie = new Movie();
+            movie.setTitle(faker.book().title());
+            movie.setGenre(faker.options().option("Action", "Comedy", "Drama", "Horror", "Sci-Fi"));
+            movie.setPlot(faker.lorem().sentence(15));
+            movie.setDirector(faker.name().fullName());
+            movie.setActors(faker.name().fullName() + ", " + faker.name().fullName());
+            movie.setDateCreated(LocalDateTime.now().minusDays(faker.number().numberBetween(1, 100)));
+            movie.setPublishedDate(LocalDateTime.now().minusDays(faker.number().numberBetween(1, 50)));
+            movie.setCreatedBy(users.get(faker.number().numberBetween(0, users.size())));
+            movies.add(movie);
+        }
+        movieRepository.saveAll(movies);
 
-        // Create Movies
-        Movie movie1 = new Movie();
-        movie1.setTitle("Inception");
-        movie1.setGenre("Sci-Fi");
-        movie1.setPlot("A thief who steals secrets through dreams is given a chance at redemption.");
-        movie1.setDirector("Christopher Nolan");
-        movie1.setActors("Leonardo DiCaprio, Joseph Gordon-Levitt");
-        movie1.setDateCreated(LocalDateTime.now());
-        movie1.setPublishedDate(LocalDateTime.now());
-        movie1.setCreatedBy(user1);
-
-        Movie movie2 = new Movie();
-        movie2.setTitle("The Matrix");
-        movie2.setGenre("Action");
-        movie2.setPlot("A hacker discovers the reality he lives in is a simulation.");
-        movie2.setDirector("The Wachowskis");
-        movie2.setActors("Keanu Reeves, Laurence Fishburne");
-        movie2.setDateCreated(LocalDateTime.now());
-        movie2.setPublishedDate(LocalDateTime.now());
-        movie2.setCreatedBy(user2);
-
-        movieRepository.saveAll(Arrays.asList(movie1, movie2));
-
-        // Create Reviews
-        Review review1 = new Review();
-        review1.setSummary("Mind-bending and visually stunning!");
-        review1.setRating(5);
-        review1.setUser(user1);
-        review1.setMovie(movie1);
-
-        Review review2 = new Review();
-        review2.setSummary("A must-watch sci-fi masterpiece.");
-        review2.setRating(5);
-        review2.setUser(user2);
-        review2.setMovie(movie2);
-
-        reviewRepository.saveAll(Arrays.asList(review1, review2));
+        // Create Random Reviews
+        List<Review> reviews = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            Review review = new Review();
+            review.setSummary(faker.lorem().sentence(10));
+            review.setRating(faker.number().numberBetween(1, 5));
+            review.setUser(users.get(faker.number().numberBetween(0, users.size())));
+            review.setMovie(movies.get(faker.number().numberBetween(0, movies.size())));
+            reviews.add(review);
+        }
+        reviewRepository.saveAll(reviews);
     }
 }
